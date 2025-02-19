@@ -89,14 +89,18 @@ class Heap {
 int main() {
     vector<int> data = {33, 28, 13, 26, 22, 48, 38, 1, 41, 29, 3, 28, 26, 32, 18};
     vector<heap_item_t<int>> heap_item_data = {};
+    std::cout << "Data: ";
     for(int i = 0; i < data.size(); i++) {
+        std::cout << data[i] << " ";
         heap_item_data.push_back({data[i], data[i]});
     }
+    std::cout << std::endl;
 
     Heap<int> heap(heap_item_data);
-    heap.print_heap();
+
     for(int i = 0; i < data.size(); i++) {
-        std::cout << heap.pop() << std::endl;
+        heap.print_heap();
+        std::cout << "Pop: " << heap.pop() << std::endl;
     }
 
     return 0;
