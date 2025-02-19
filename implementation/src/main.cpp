@@ -5,11 +5,6 @@
 
 using std::vector;
 
-enum heap_mode_e {
-    MIN,
-    MAX
-};
-
 template <typename T>
 struct heap_item_t {
     int key;
@@ -31,7 +26,6 @@ struct heap_item_t {
 template <class T>
 class Heap {
     private:
-        heap_mode_e mode;
         vector<heap_item_t<T>> heap;
         void heapify(int i) {
             int l = l_child(i);
@@ -39,12 +33,10 @@ class Heap {
             int chosen_idx = i;
             int heap_size = heap.size();
 
-            if ((mode == heap_mode_e::MAX && l < heap_size && heap[l].key > heap[chosen_idx].key) ||
-                (mode == heap_mode_e::MIN && l < heap_size && heap[l].key < heap[chosen_idx].key)) {
+            if (l < heap_size && heap[l].key < heap[chosen_idx].key) {
                     chosen_idx = l;
             }
-            if ((mode == heap_mode_e::MAX && r < heap_size && heap[r].key > heap[chosen_idx].key) ||
-                (mode == heap_mode_e::MIN && r < heap_size && heap[r].key < heap[chosen_idx].key)) {
+            if (r < heap_size && heap[r].key < heap[chosen_idx].key) {
                     chosen_idx = r;
             }
             if(chosen_idx != i) {
@@ -66,16 +58,11 @@ class Heap {
             return (i << 1) + 2;
         }
     public:
-        Heap(heap_mode_e heap_type, vector<heap_item_t<T>> &items) {
-            mode = heap_type;
+        Heap(vector<heap_item_t<T>> &items) {
             heap = items;
             for(int i = parent(items.size() - 1); i >= 0; i--) {
                 heapify(i);
             }
-        }
-
-        heap_mode_e get_mode() {
-            return mode;
         }
 
         T pop() {
@@ -88,6 +75,14 @@ class Heap {
             heap.pop_back();
             return temp.data;
         }
+
+        void print_heap() {
+            std::cout << "Heap: ";
+            for(int i = 0; i < heap.size(); i++) {
+                std::cout << heap[i].data << " ";
+            }
+            std::cout << std::endl;
+        }
 };
 
 int main() {
@@ -97,8 +92,8 @@ int main() {
         heap_item_data.push_back({data[i], data[i]});
     }
 
-    Heap<int> heap(heap_mode_e::MIN, heap_item_data);
-
+    Heap<int> heap(heap_item_data);
+    heap.print_heap();
     for(int i = 0; i < data.size(); i++) {
         std::cout << heap.pop() << std::endl;
     }
