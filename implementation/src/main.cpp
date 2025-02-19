@@ -10,15 +10,15 @@ struct heap_item_t {
     int key;
     T data;
 
-    heap_item_t(int keyA, T& dataA) {
+    heap_item_t(int keyA, T dataA) {
         key = keyA;
-        data = T(dataA);
+        data = dataA;
     }
 
     void operator=(const heap_item_t<T>& new_value) {
         if(this != &new_value) {
             key = new_value.key;
-            data = T(new_value.data);
+            data = new_value.data;
         }
     }
 };
@@ -40,9 +40,8 @@ class Heap {
                     chosen_idx = r;
             }
             if(chosen_idx != i) {
-                heap_item_t<T> temp(heap[chosen_idx].key, heap[chosen_idx].data);
-                heap[chosen_idx] = heap[i];
-                heap[i] = temp;
+                std::swap(heap[chosen_idx], heap[i]);
+                heapify(chosen_idx);
             }
         }
 
@@ -98,10 +97,20 @@ int main() {
 
     Heap<int> heap(heap_item_data);
 
+    vector<int> pop_order = {};
+
     for(int i = 0; i < data.size(); i++) {
         heap.print_heap();
-        std::cout << "Pop: " << heap.pop() << std::endl;
+        int popped = heap.pop();
+        pop_order.push_back(popped);
+        std::cout << "Pop: " << popped << std::endl;
     }
+
+    std::cout << "Pop order: ";
+    for(int i = 0; i < data.size(); i++) {
+        std::cout << pop_order[i] << " ";
+    }
+    std::cout << std::endl;
 
     return 0;
 }
