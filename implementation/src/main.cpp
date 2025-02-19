@@ -73,6 +73,7 @@ class Heap {
             heap[0] = heap.back();
             heap.back() = temp;
             heap.pop_back();
+            heapify(0);
             return temp.data;
         }
 
